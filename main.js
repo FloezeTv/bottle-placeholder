@@ -26,19 +26,20 @@ renderer.render(scene, camera);
 
 const material = new MeshStandardMaterial({ color: 0x00FF00 });
 
-const bottle = await new Promise((resolve, reject) => new OBJLoader().load(
+new OBJLoader().load(
     'bottle.obj',
-    resolve,
+    bottle => {
+        bottle.traverse(child => {
+            if (child instanceof Mesh)
+                child.material = material;
+        });
+        bottle.position.setY(-8);
+        bottle.scale.setScalar(8);
+        scene.add(bottle);
+    },
     xhr => { console.log(xhr.loaded / xhr.total * 100 + "% loaded") },
-    reject
-));
-bottle.traverse(child => {
-    if (child instanceof Mesh)
-        child.material = material;
-})
-bottle.position.setY(-8);
-bottle.scale.setScalar(8);
-scene.add(bottle);
+    console.err
+);
 
 
 const light = new SpotLight(0xFFFFFF);;
