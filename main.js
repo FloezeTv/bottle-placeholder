@@ -1,4 +1,4 @@
-import { Color, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, SphereGeometry, TorusGeometry, Vector3, WebGLRenderer } from 'three';
+import { Color, Mesh, MeshBasicMaterial, MeshStandardMaterial, PerspectiveCamera, PointLight, Scene, SphereGeometry, Vector3, WebGLRenderer } from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { randFloat, randFloatSpread } from 'three/src/math/MathUtils';
 import './style.css';
@@ -24,7 +24,7 @@ window.onresize = () => {
 renderer.render(scene, camera);
 
 
-const material = new MeshBasicMaterial({ color: 0x00FF00, wireframe: true });
+const material = new MeshStandardMaterial({ color: 0x00FF00 });
 
 const bottle = await new Promise((resolve, reject) => new OBJLoader().load(
     'bottle.obj',
@@ -41,6 +41,8 @@ bottle.scale.setScalar(8);
 scene.add(bottle);
 
 
+const light = new PointLight(0xFFFFFF);
+scene.add(light);
 
 const starMinVal = 0.6, starMaxVal = 1, starDelta = 0.01;
 const starFlickers = [];
@@ -90,6 +92,8 @@ const animate = () => {
 
     camera.position.set(Math.sin(cameraAngle) * cameraDistance, 0, Math.cos(cameraAngle) * cameraDistance);
     camera.lookAt(0, 0, 0);
+
+    light.position.set(camera.position.x, camera.position.y, camera.position.z);
 
     cameraAngle += 0.001;
 
