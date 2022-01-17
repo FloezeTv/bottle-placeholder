@@ -1,4 +1,4 @@
-import { Color, Mesh, MeshBasicMaterial, MeshStandardMaterial, PerspectiveCamera, PointLight, Scene, SphereGeometry, Vector3, WebGLRenderer } from 'three';
+import { Color, Mesh, MeshBasicMaterial, MeshStandardMaterial, PerspectiveCamera, Scene, SphereGeometry, SpotLight, Vector3, WebGLRenderer } from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { randFloat, randFloatSpread } from 'three/src/math/MathUtils';
 import './style.css';
@@ -36,12 +36,14 @@ bottle.traverse(child => {
     if (child instanceof Mesh)
         child.material = material;
 })
-bottle.position.setY(-9);
+bottle.position.setY(-8);
 bottle.scale.setScalar(8);
 scene.add(bottle);
 
 
-const light = new PointLight(0xFFFFFF);
+const light = new SpotLight(0xFFFFFF);;
+light.angle = 40 / 180 * Math.PI;
+light.penumbra = 1;
 scene.add(light);
 
 const starMinVal = 0.6, starMaxVal = 1, starDelta = 0.01;
@@ -93,7 +95,7 @@ const animate = () => {
     camera.position.set(Math.sin(cameraAngle) * cameraDistance, 0, Math.cos(cameraAngle) * cameraDistance);
     camera.lookAt(0, 0, 0);
 
-    light.position.set(camera.position.x, camera.position.y, camera.position.z);
+    light.position.set(camera.position.x, camera.position.y, camera.position.z - 2);
 
     cameraAngle += 0.001;
 
